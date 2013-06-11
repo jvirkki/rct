@@ -1,5 +1,5 @@
 #
-#  Copyright 2012 Jyri J. Virkki <jyri@virkki.com>
+#  Copyright 2012-2013 Jyri J. Virkki <jyri@virkki.com>
 #
 #  This file is part of rct.
 #
@@ -29,7 +29,7 @@ class RCTCLI
 
 
   def self.rct_cli
-    method = $ARGV.shift
+    method = ARGV.shift
     if (method == nil || method.empty?)
       RCT.bad_invocation("no CLI class/method given!")
     end
@@ -37,6 +37,7 @@ class RCTCLI
     method =~ /([^\.]*)\.(.*)/
     class_name = $1
     method_name = $2
+    RCT.log(DEBUG, "Requested [#{method}]")
     RCT.log(DEBUG, "CLI class: #{class_name}, method: #{method_name}")
 
     obj = Object::const_get(class_name).new()

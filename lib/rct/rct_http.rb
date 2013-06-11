@@ -1,5 +1,5 @@
 #
-#  Copyright 2012 Jyri J. Virkki <jyri@virkki.com>
+#  Copyright 2012-2013 Jyri J. Virkki <jyri@virkki.com>
 #
 #  This file is part of rct.
 #
@@ -99,8 +99,20 @@ class RCTHTTP
     end
     headers['User-agent'] = "rct/#{RCT_VERSION}"
 
-    res = nil
+    auth = RCT.sget(REQ_AUTH_TYPE)
+    if (auth != nil)
+      if (auth == REQ_AUTH_TYPE_BASIC)
+        name = RCT.sget(REQ_AUTH_NAME)
+        pwd = RCT.sget(REQ_AUTH_PWD)
+        @http_client.set_auth(nil, name, pwd)
+      else
+        raise "Requested auth type '#{auth}' unknown"
+      end
+    end
 
+    show_request(method, url, headers, RCT.sget(REQ_BODY))
+
+    res = nil
     begin
       if (method == "GET")
         res = @http_client.get(url, nil, headers)
@@ -119,15 +131,57 @@ class RCTHTTP
       else
         raise "Method #{method} not implemented yet!"
       end
+
     rescue Exception => e
       response = Response.new(nil)
       response.add_error(e.to_s)
+      show_response(response)
       return response
     end
 
+    show_response(res)
     response = Response.new(res)
     return response
   end
 
+
+  #----------------------------------------------------------------------------
+  # Show verbose info about the request.
+  #
+  def show_request(method, url, headers, body)
+    return if (RCT.log_level < INFO)
+
+    RCT.log(INFO, "-----[ REQUEST ]---" + "-" * 60)
+    RCT.log(INFO, "#{method} #{url}")
+    headers.each { |k,v|
+      RCT.log(INFO, "#{k}: #{v}")
+    }
+    RCT.log(INFO, "")
+
+    if (body != nil)
+      RCT.log(INFO, body)
+      RCT.log(INFO, "")
+    end
+  end
+
+
+  #----------------------------------------------------------------------------
+  # Show verbose info about the response.
+  #
+  def show_response(res)
+    return if (RCT.log_level < INFO)
+
+    RCT.log(INFO, "-----[ RESPONSE ]--" + "-" * 60)
+    RCT.log(INFO, "#{res.to_s}")
+
+    headers = res.headers
+    if (headers != nil)
+      headers.each { |k,v|
+        RCT.log(INFO, "XH: #{k}: #{v}")
+      }
+    end
+
+    RCT.log(INFO, res.body)
+  end
 
 end

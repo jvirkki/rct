@@ -1,5 +1,5 @@
 #
-#  Copyright 2012-2013 Jyri J. Virkki <jyri@virkki.com>
+#  Copyright 2012 Jyri J. Virkki <jyri@virkki.com>
 #
 #  This file is part of rct.
 #
@@ -17,32 +17,26 @@
 #  along with rct.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-RCT_VERSION = '0.2'
 
-RCT_MODE = '_mode'
-RCT_MODE_CLI = 'cli'
-RCT_MODE_TEST = 'test'
-TEST_SUITE_FILE = '_test_suite'
+#------------------------------------------------------------------------------
+# Convenience script for debugging rct.
+# Runs rct without gem installation.
+# 
 
-SERVER_PROTOCOL = '_protocol'
-SERVER_HOSTNAME = '_hostname'
-SERVER_PORT = '_port'
+if [ "$RCT_RUBY" = "" ]; then
+    RCT_RUBY=ruby
+fi
 
-SERVER_TYPE = '_server_type'
+RCTD=`readlink -f $0`
+BIN=`dirname $RCTD`
+LIB=`readlink -f $BIN/../lib`
+RCT=$BIN/rct
 
-REQ_METHOD = '_method'
-REQ_PATH = '_path'
-REQ_PARAMS = '_req_params'
-REQ_BODY = '_req_body'
-REQ_HEADERS = '_req_headers'
+echo BIN is $BIN
+echo LIB is $LIB
+echo RCTD is $RCTD
+echo RCT is $RCT
 
-REQ_AUTH_TYPE = '_auth_type'
-REQ_AUTH_TYPE_BASIC = 'basic'
-REQ_AUTH_NAME = '_req_auth_name'
-REQ_AUTH_PWD = '_req_auth_pwd'
-
-RESULT = 1
-INFO = 2
-DEBUG = 3
-
-
+CMD="$RCT_RUBY -I$LIB -I$LIB/rct -I. $RCT $@"
+echo $CMD
+exec $CMD

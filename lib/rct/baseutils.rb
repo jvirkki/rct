@@ -1,5 +1,5 @@
 #
-#  Copyright 2012 Jyri J. Virkki <jyri@virkki.com>
+#  Copyright 2012-2013 Jyri J. Virkki <jyri@virkki.com>
 #
 #  This file is part of rct.
 #
@@ -25,11 +25,23 @@ class RCT
 
   @log_level = RESULT
 
+
+  def self.log_level
+    @log_level
+  end
+
+
   def self.set_log_level(level)
     @log_level = RESULT if level == RESULT
     @log_level = INFO if level == INFO
     @log_level = DEBUG if level == DEBUG
   end
+
+
+  def self.increase_log_level
+    @log_level += 1
+  end
+
 
   def self.log(level, line)
     if (level <= @log_level)
@@ -37,26 +49,31 @@ class RCT
     end
   end
 
+
   def self.error(msg)
     puts "error: #{msg}"
   end
+
 
   def self.bad_invocation(msg)
     error(msg)
     exit(1)
   end
 
+
   def self.die(msg)
     error(msg)
     exit(1)
   end
 
+
   def self.argv_get(pos)
-    value = $ARGV[pos + 1]
-    $ARGV.delete_at(pos + 1)
-    $ARGV.delete_at(pos)
+    value = ARGV[pos + 1]
+    ARGV.delete_at(pos + 1)
+    ARGV.delete_at(pos)
     return value
   end
+
 
   def self.help
 
@@ -69,14 +86,16 @@ class RCT
 
   end
 
+
   def self.parse_global_options
     pos = 0
-    if ($ARGV == nil)
+
+    if (ARGV == nil)
       die("No arguments!")
     end
 
-    while (pos < $ARGV.length)
-      arg = $ARGV[pos]
+    while (pos < ARGV.length)
+      arg = ARGV[pos]
 
       if (arg == '-t' || arg == '--test')
         sset(RCT_MODE, RCT_MODE_TEST)
@@ -91,6 +110,10 @@ class RCT
       elsif (arg == '-p' || arg == '--port')
         sset(SERVER_PORT, argv_get(pos))
 
+      elsif (arg == '-v')
+        increase_log_level()
+        ARGV.delete_at(pos)
+
       else
         pos += 1
       end
@@ -98,10 +121,11 @@ class RCT
     end
   end
 
+
   def self.get_opt(info)
     pos = 0
-    while (pos < $ARGV.length)
-      arg = $ARGV[pos]
+    while (pos < ARGV.length)
+      arg = ARGV[pos]
       if (arg == info[0] || arg == info[1])
         return argv_get(pos)
       else
@@ -109,6 +133,7 @@ class RCT
       end
     end
   end
+
 
   def self.parse_options(opts, required)
     return if opts == nil

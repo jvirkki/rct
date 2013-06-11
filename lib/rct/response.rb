@@ -1,5 +1,5 @@
 #
-#  Copyright 2012 Jyri J. Virkki <jyri@virkki.com>
+#  Copyright 2012-2013 Jyri J. Virkki <jyri@virkki.com>
 #
 #  This file is part of rct.
 #
@@ -84,6 +84,15 @@ class Response
   def header(name)
     return nil if @res == nil
     return @res.header[name]
+  end
+
+
+  #----------------------------------------------------------------------------
+  # Return all HTTP headers (or nil if an error)
+  #
+  def headers
+    return nil if @res == nil
+    return @res.header
   end
 
 
