@@ -25,6 +25,10 @@
 # 'cli' method which provides info about the CLI methods and their
 # arguments.
 #
+# Client methods can provide friendly output in CLI mode by setting
+# CLI_OUTPUT to the desired text. If it is not set, the raw response body
+# is shown.
+#
 class RCTCLI
 
 
@@ -63,7 +67,12 @@ class RCTCLI
     }
 
     RCT.log(INFO, response)
-    puts response.body
+    cli_output = RCT.sget(CLI_OUTPUT)
+    if (cli_output != nil)
+      puts cli_output
+    else
+      puts response.body
+    end
   end
 
 
