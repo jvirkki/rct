@@ -19,6 +19,7 @@
 
 
 require 'httpclient'
+require 'base64'
 
 
 #------------------------------------------------------------------------------
@@ -104,7 +105,15 @@ class RCTHTTP
       if (auth == REQ_AUTH_TYPE_BASIC)
         name = RCT.sget(REQ_AUTH_NAME)
         pwd = RCT.sget(REQ_AUTH_PWD)
-        @http_client.set_auth(nil, name, pwd)
+
+        # This does not send the authorization header unless server
+        # first responds with 401, which some REST services won't do.
+        # So, instead, set header manually below.
+        # @http_client.set_auth(nil, name, pwd)
+
+        up = "#{name}:#{pwd}"
+        encoded = Base64.strict_encode64(up)
+        headers['Authorization'] = "Basic #{encoded}"
       else
         raise "Requested auth type '#{auth}' unknown"
       end
