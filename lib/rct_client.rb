@@ -20,6 +20,7 @@
 
 require 'securerandom'
 require 'json'
+require 'cgi'
 
 
 #------------------------------------------------------------------------------
@@ -40,11 +41,12 @@ class RCTClient
       return params
     end
 
+    val = CGI.escape(value)
     if (params == nil || params.empty?)
-      return "?#{name}=#{value}"
+      return "?#{name}=#{val}"
     end
 
-    return "#{params}&#{name}=#{value}"
+    return "#{params}&#{name}=#{val}"
   end
 
 
@@ -118,6 +120,16 @@ class RCTClient
   #
   def sdelete(key)
     RCT.sdelete(key)
+  end
+
+
+  #----------------------------------------------------------------------------
+  # Convenience function, returns true if we're running in CLI mode.
+  #
+  def is_cli
+    mode = sget(RCT_MODE)
+    return true if (mode == RCT_MODE_CLI)
+    false
   end
 
 
