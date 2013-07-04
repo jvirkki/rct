@@ -71,6 +71,7 @@ class RCTCLI
     if (cli_output != nil)
       puts cli_output
     else
+      puts response
       puts response.body
     end
   end

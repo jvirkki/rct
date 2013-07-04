@@ -92,7 +92,7 @@ class Response
   #
   def headers
     return nil if @res == nil
-    return @res.header
+    return @res.headers
   end
 
 
@@ -112,7 +112,12 @@ class Response
   #
   def to_s
     return "error: #{@fail_msg}" if @res == nil
-    return "#{@res.status} #{@res.reason}"
+
+    rv = "#{@res.status} #{@res.reason}"
+    if (@fail_msg != nil)
+      rv += " (#{@fail_msg})"
+    end
+    return rv
   end
 
 

@@ -148,8 +148,8 @@ class RCTHTTP
       return response
     end
 
-    show_response(res)
     response = Response.new(res)
+    show_response(response)
     return response
   end
 
@@ -186,8 +186,9 @@ class RCTHTTP
     headers = res.headers
     if (headers != nil)
       headers.each { |k,v|
-        RCT.log(INFO, "XH: #{k}: #{v}")
+        RCT.log(INFO, "#{k}: #{v}")
       }
+      RCT.log(INFO, "")
     end
 
     RCT.log(INFO, res.body)
