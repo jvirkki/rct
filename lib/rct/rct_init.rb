@@ -1,6 +1,6 @@
 #!/usr/bin/env jruby
 #
-#  Copyright 2012-2013 Jyri J. Virkki <jyri@virkki.com>
+#  Copyright 2013 Jyri J. Virkki <jyri@virkki.com>
 #
 #  This file is part of rct.
 #
@@ -19,17 +19,12 @@
 #
 
 
-#------------------------------------------------------------------------------
-# rct main
-#
-# Runs either a CLI invocation or a test suite depending on arguments.
-# 
+# A few globals:
+$HTTP = RCTHTTP.new()
+$STATE = State.new()
 
-require 'rct'
-require 'rct/rct_init'
-
-RCT.parse_global_options()
-
-if ($STATE.get(RCT_MODE) == RCT_MODE_CLI)
-  RCTCLI.rct_cli
-end
+# Set some defaults:
+RCT.sset(RCT_MODE, RCT_MODE_CLI)
+RCT.sset(SERVER_PROTOCOL, 'http')
+RCT.sset(SERVER_HOSTNAME, 'localhost')
+RCT.sset(SERVER_PORT, '80')
