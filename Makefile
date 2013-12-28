@@ -17,7 +17,7 @@
 #  along with rct.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-GEM=jgem
+GEM=gem
 
 build:
 	$(GEM) build rct.gemspec

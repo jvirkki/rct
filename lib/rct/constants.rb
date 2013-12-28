@@ -17,7 +17,7 @@
 #  along with rct.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-RCT_VERSION = '0.4'
+RCT_VERSION = '0.5'
 
 RCT_MODE = '_mode'
 RCT_MODE_CLI = 'cli'

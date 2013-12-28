@@ -1,4 +1,4 @@
-#!/usr/bin/env jruby
+#!/usr/bin/env ruby
 #
 #  Copyright 2012-2013 Jyri J. Virkki <jyri@virkki.com>
 #

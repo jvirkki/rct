@@ -1,4 +1,3 @@
-#!/usr/bin/env jruby
 #
 #  Copyright 2013 Jyri J. Virkki <jyri@virkki.com>
 #
