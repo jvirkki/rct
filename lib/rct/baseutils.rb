@@ -19,7 +19,7 @@
 
 
 #-----------------------------------------------------------------------------
-# Assorted utility methods. TODO: cleanup
+# Assorted utility methods of general interest. TODO: cleanup
 #
 class RCT
 
@@ -87,6 +87,12 @@ class RCT
   end
 
 
+  # define global options (from parse_global_options) so can do error chacking
+  $GLOBAL_OPTS = {
+    '-t' => 1, '--test' => 1, '--req' => 1, '-h' => 1, '--host' => 1,
+    '-p' => 1, '--port' => 1, '-v' => 1
+  }
+
   def self.parse_global_options
     pos = 0
 
@@ -138,6 +144,10 @@ class RCT
   def self.parse_options(opts, required)
     return if opts == nil
     opts.each { |key, info|
+      if ($GLOBAL_OPTS[info[0]] == 1 || $GLOBAL_OPTS[info[1]] == 1)
+        bad_invocation("Error in CLI definition: #{info[0]}|#{info[1]} " +
+                       "conflicts with global options!")
+      end
       value = get_opt(info)
       if (required && value == nil)
         bad_invocation("Required argument #{info[0]}|#{info[1]} has no value!")
