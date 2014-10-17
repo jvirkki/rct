@@ -73,6 +73,12 @@ class RCTHTTP
       die("server protocol missing!")
     end
 
+    cafile = RCT.sget(SSL_CA_FILE)
+    if (cafile != nil)
+      @http_client.ssl_config.set_trust_ca(cafile)
+      RCT.log(INFO, "CA trust file set to #{cafile}")
+    end
+
     if (host == nil)
       die("server hostname missing!")
     end

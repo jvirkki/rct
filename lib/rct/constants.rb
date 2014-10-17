@@ -41,6 +41,8 @@ REQ_AUTH_TYPE_BASIC = 'basic'
 REQ_AUTH_NAME = '_req_auth_name'
 REQ_AUTH_PWD = '_req_auth_pwd'
 
+SSL_CA_FILE = '_ca_file'
+
 RESULT = 1
 INFO = 2
 DEBUG = 3

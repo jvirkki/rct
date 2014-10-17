@@ -90,7 +90,7 @@ class RCT
   # define global options (from parse_global_options) so can do error chacking
   $GLOBAL_OPTS = {
     '-t' => 1, '--test' => 1, '--req' => 1, '-h' => 1, '--host' => 1,
-    '-p' => 1, '--port' => 1, '-v' => 1
+    '-p' => 1, '--port' => 1, '-v' => 1, '--cafile' => 1
   }
 
   def self.parse_global_options
@@ -115,6 +115,9 @@ class RCT
 
       elsif (arg == '-p' || arg == '--port')
         sset(SERVER_PORT, argv_get(pos))
+
+      elsif (arg == '--cafile')
+        sset(SSL_CA_FILE, argv_get(pos))
 
       elsif (arg == '-v')
         increase_log_level()
