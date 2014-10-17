@@ -1,5 +1,5 @@
 #
-#  Copyright 2012-2013 Jyri J. Virkki <jyri@virkki.com>
+#  Copyright 2012-2014 Jyri J. Virkki <jyri@virkki.com>
 #
 #  This file is part of rct.
 #
@@ -57,6 +57,7 @@ class RCTHTTP
   # * REQ_METHOD      - HTTP method to use (if not set, default is GET)
   # * REQ_HEADERS     - Optional hash of additional request headers to set.
   # * REQ_BODY        - Optional request body.
+  # * SSL_CA_FILE     - Override default trusted CA file for https.
   #
   # Always returns an rct Response object.
   #

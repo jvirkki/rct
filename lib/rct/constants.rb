@@ -1,5 +1,5 @@
 #
-#  Copyright 2012-2013 Jyri J. Virkki <jyri@virkki.com>
+#  Copyright 2012-2014 Jyri J. Virkki <jyri@virkki.com>
 #
 #  This file is part of rct.
 #
@@ -17,7 +17,7 @@
 #  along with rct.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-RCT_VERSION = '0.5'
+RCT_VERSION = '0.6'
 
 RCT_MODE = '_mode'
 RCT_MODE_CLI = 'cli'
