@@ -57,7 +57,7 @@ class Response
       @fail_msg = "#{@fail_msg}; #{msg}"
     end
   end
-  
+
 
   #----------------------------------------------------------------------------
   # Returns true unless this response has been flagged as an error via

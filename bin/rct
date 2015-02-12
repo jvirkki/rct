@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-#  Copyright 2012-2013 Jyri J. Virkki <jyri@virkki.com>
+#  Copyright 2012-2015 Jyri J. Virkki <jyri@virkki.com>
 #
 #  This file is part of rct.
 #
@@ -23,7 +23,7 @@
 # rct main
 #
 # Runs either a CLI invocation or a test suite depending on arguments.
-# 
+#
 
 require 'rct'
 require 'rct/rct_init'

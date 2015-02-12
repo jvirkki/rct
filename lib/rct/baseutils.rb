@@ -1,5 +1,5 @@
 #
-#  Copyright 2012-2014 Jyri J. Virkki <jyri@virkki.com>
+#  Copyright 2012-2015 Jyri J. Virkki <jyri@virkki.com>
 #
 #  This file is part of rct.
 #
@@ -19,18 +19,24 @@
 
 
 #-----------------------------------------------------------------------------
-# Assorted utility methods of general interest. TODO: cleanup
+# Assorted utility methods of general interest.
 #
 class RCT
 
   @log_level = RESULT
 
 
+  #---------------------------------------------------------------------------
+  # Return current log level.
+  #
   def self.log_level
     @log_level
   end
 
 
+  #---------------------------------------------------------------------------
+  # Set log level (RESULT, INFO, DEBUG; from constants.rb).
+  #
   def self.set_log_level(level)
     @log_level = RESULT if level == RESULT
     @log_level = INFO if level == INFO
@@ -38,11 +44,17 @@ class RCT
   end
 
 
+  #---------------------------------------------------------------------------
+  # Increase log verbosity level by one.
+  #
   def self.increase_log_level
     @log_level += 1
   end
 
 
+  #---------------------------------------------------------------------------
+  # Log a line of output, if appropriate for current log level.
+  #
   def self.log(level, line)
     if (level <= @log_level)
       puts line
@@ -50,23 +62,36 @@ class RCT
   end
 
 
+  #---------------------------------------------------------------------------
+  # Log an error to stdout (prefixed with 'error:')
+  #
   def self.error(msg)
     puts "error: #{msg}"
   end
 
 
+  #---------------------------------------------------------------------------
+  # Log an error to stdout (prefixed with 'error:') and exit.
+  #
   def self.bad_invocation(msg)
     error(msg)
     exit(1)
   end
 
 
+  #---------------------------------------------------------------------------
+  # Log an error to stdout (prefixed with 'error:') and exit.
+  #
   def self.die(msg)
     error(msg)
     exit(1)
   end
 
 
+  #---------------------------------------------------------------------------
+  # Return the value of the flag at position pos in ARGV.
+  # Removes both the value and the flag from ARGV.
+  #
   def self.argv_get(pos)
     value = ARGV[pos + 1]
     ARGV.delete_at(pos + 1)
@@ -75,6 +100,9 @@ class RCT
   end
 
 
+  #---------------------------------------------------------------------------
+  #
+  #
   def self.help
 
     # default is CLI invocation of method name
@@ -160,21 +188,33 @@ class RCT
   end
 
 
+  #---------------------------------------------------------------------------
+  # Set a key,value pair in the global state.
+  #
   def self.sset(key, value, temp=false)
     $STATE.set(key, value, temp)
   end
 
 
+  #---------------------------------------------------------------------------
+  # Set a temporary key,value pair in the global state.
+  #
   def self.ssettmp(key, value)
     $STATE.set(key, value, true)
   end
 
 
+  #---------------------------------------------------------------------------
+  # Get the value of a key from the global state.
+  #
   def self.sget(key)
     $STATE.get(key)
   end
 
 
+  #---------------------------------------------------------------------------
+  # Remove the value of a key from the global state.
+  #
   def self.sdelete(key)
     $STATE.delete(key)
   end

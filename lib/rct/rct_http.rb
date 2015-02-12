@@ -1,5 +1,5 @@
 #
-#  Copyright 2012-2014 Jyri J. Virkki <jyri@virkki.com>
+#  Copyright 2012-2015 Jyri J. Virkki <jyri@virkki.com>
 #
 #  This file is part of rct.
 #
@@ -156,6 +156,12 @@ class RCTHTTP
     end
 
     response = Response.new(res)
+
+    status = response.status
+    if (status == 401)
+      response.add_error("Unauthorized")
+    end
+
     show_response(response)
     return response
   end
