@@ -39,4 +39,5 @@ Gem::Specification.new do |s|
   s.files = lib_files.split
   s.rubyforge_project = "nowarning"
   s.license = 'GPLv3'
+  s.add_runtime_dependency 'httpclient'
 end
