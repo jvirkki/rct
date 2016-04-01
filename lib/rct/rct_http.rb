@@ -58,6 +58,7 @@ class RCTHTTP
   # * REQ_HEADERS     - Optional hash of additional request headers to set.
   # * REQ_BODY        - Optional request body.
   # * SSL_CA_FILE     - Override default trusted CA file for https.
+  # * SSL_IGNORE_CA   - INSECURE - Ignore SSL certificate validation.
   #
   # Always returns an rct Response object.
   #
@@ -78,6 +79,12 @@ class RCTHTTP
     if (cafile != nil)
       @http_client.ssl_config.set_trust_ca(cafile)
       RCT.log(INFO, "CA trust file set to #{cafile}")
+    end
+
+    ignore_ca = RCT.sget(SSL_IGNORE_CA)
+    if (ignore_ca)
+      @http_client.ssl_config.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      RCT.log(INFO, "Insecure SSL mode, ignoring certificate validation!")
     end
 
     if (host == nil)
