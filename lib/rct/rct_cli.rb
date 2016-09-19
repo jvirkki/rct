@@ -1,5 +1,5 @@
 #
-#  Copyright 2012-2015 Jyri J. Virkki <jyri@virkki.com>
+#  Copyright 2012-2016 Jyri J. Virkki <jyri@virkki.com>
 #
 #  This file is part of rct.
 #
@@ -90,6 +90,11 @@ class RCTCLI
     response = obj.send(method_name) {
       $HTTP.handle_request()
     }
+
+    if response == nil
+      RCT.log(INFO, "warning: response nil, likely a bug in " +
+              "#{class_name}.#{method_name}?")
+    end
 
     RCT.log(INFO, response)
     cli_output = RCT.sget(CLI_OUTPUT)

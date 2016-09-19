@@ -1,5 +1,5 @@
 #
-#  Copyright 2012-2015 Jyri J. Virkki <jyri@virkki.com>
+#  Copyright 2012-2016 Jyri J. Virkki <jyri@virkki.com>
 #
 #  This file is part of rct.
 #
@@ -91,12 +91,34 @@ class RCT
   #---------------------------------------------------------------------------
   # Return the value of the flag at position pos in ARGV.
   # Removes both the value and the flag from ARGV.
+  # If value begins with a quote, consume arguments until end of quoted text.
   #
   def self.argv_get(pos)
+
     value = ARGV[pos + 1]
-    ARGV.delete_at(pos + 1)
-    ARGV.delete_at(pos)
-    return value
+
+    if (value[0] != '"')
+      ARGV.delete_at(pos)
+      ARGV.delete_at(pos)
+      return value
+
+    else                        # need to find end of quote
+      ARGV.delete_at(pos)
+      ARGV.delete_at(pos)
+      value = value[1..-1]
+
+      loop do
+        value = "#{value} #{ARGV[pos]}"
+        ARGV.delete_at(pos)
+        if (value[-1] == '"')
+          value = value[0..-2]
+          return value
+        end
+        if (ARGV.length == pos)
+          bad_invocation("Unterminated quote in arguments")
+        end
+      end
+    end
   end
 
 
@@ -118,7 +140,7 @@ class RCT
   # define global options (from parse_global_options) so can do error chacking
   $GLOBAL_OPTS = {
     '-t' => 1, '--test' => 1, '--req' => 1, '-h' => 1, '--host' => 1,
-    '-p' => 1, '--port' => 1, '-v' => 1, '--cafile' => 1
+    '-p' => 1, '--port' => 1, '-v' => 1, '--cafile' => 1, '--insecure' => 1
   }
 
   def self.parse_global_options
@@ -146,6 +168,9 @@ class RCT
 
       elsif (arg == '--cafile')
         sset(SSL_CA_FILE, argv_get(pos))
+
+      elsif (arg == '--insecure')
+        sset(SSL_IGNORE_CA, true)
 
       elsif (arg == '-v')
         increase_log_level()
@@ -209,6 +234,15 @@ class RCT
   #
   def self.sget(key)
     $STATE.get(key)
+  end
+
+
+  #---------------------------------------------------------------------------
+  # Get the value of a key from the global state or the default.
+  #
+  def self.sgetdef(key, default)
+    v = $STATE.get(key)
+    v == nil ? default : v
   end
 
 

@@ -1,5 +1,5 @@
 #
-#  Copyright 2012-2015 Jyri J. Virkki <jyri@virkki.com>
+#  Copyright 2012-2016 Jyri J. Virkki <jyri@virkki.com>
 #
 #  This file is part of rct.
 #
@@ -42,6 +42,7 @@ REQ_AUTH_NAME = '_req_auth_name'
 REQ_AUTH_PWD = '_req_auth_pwd'
 
 SSL_CA_FILE = '_ca_file'
+SSL_IGNORE_CA = '_ignore_ca'
 
 RESULT = 1
 INFO = 2

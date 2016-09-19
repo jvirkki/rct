@@ -1,5 +1,5 @@
 #
-#  Copyright 2012 Jyri J. Virkki <jyri@virkki.com>
+#  Copyright 2012-2016 Jyri J. Virkki <jyri@virkki.com>
 #
 #  This file is part of rct.
 #
@@ -116,6 +116,14 @@ class RCTClient
 
 
   #----------------------------------------------------------------------------
+  # Get the value of 'key' (if available, or default).
+  #
+  def sgetdef(key, default)
+    RCT.sgetdef(key, default)
+  end
+
+
+  #----------------------------------------------------------------------------
   # Delete the given 'key' from both permanent and temporary state.
   #
   def sdelete(key)
@@ -129,6 +137,18 @@ class RCTClient
   def is_cli
     mode = sget(RCT_MODE)
     return true if (mode == RCT_MODE_CLI)
+    false
+  end
+
+
+  #----------------------------------------------------------------------------
+  # Convenience function, set CLI output only if we're running in CLI mode.
+  #
+  def cli_out(line)
+    if (is_cli)
+      sset(CLI_OUTPUT, line)
+      true
+    end
     false
   end
 
