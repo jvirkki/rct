@@ -244,26 +244,10 @@ END
   #---------------------------------------------------------------------------
   # Set a key,value pair in the global state.
   #
-  def self.sset(key, value, ifnotset: false, default: nil, tmp: false)
+  def self.sset(key, value, temp=false)
 
-    msg = "SET"
-    msg = msg + "-TMP" if (tmp)
-    msg = msg + ": #{key} = '#{value}', ifnotset: #{ifnotset}, default: #{default}"
-
-    if (ifnotset)
-      if ($STATE.get(key) != nil)
-        msg = msg + " (SKIP)"
-        log(DEBUG, msg)
-        return
-      end
-    end
-
-    if (value == nil)
-      msg = msg + " (using default)"
-      value = default
-    end
-
-    $STATE.set(key, value, tmp)
+    $STATE.set(key, value, temp)
+    msg = "SET: #{key} = '#{value}'"
     log(DEBUG, msg)
   end
 
@@ -271,18 +255,17 @@ END
   #---------------------------------------------------------------------------
   # Set a temporary key,value pair in the global state.
   #
-  def self.ssettmp(key, value, ifnotset: false, default: nil)
-    sset(key, value, ifnotset: ifnotset, default: default, tmp: true)
+  def self.ssettmp(key, value)
+    sset(key, value, true)
   end
 
 
   #---------------------------------------------------------------------------
   # Get the value of a key from the global state.
   #
-  def self.sget(key, default: nil)
+  def self.sget(key)
     val = $STATE.get(key)
     return val if (val != nil)
-    default
   end
 
 

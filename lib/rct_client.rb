@@ -93,24 +93,24 @@ class RCTClient
   #----------------------------------------------------------------------------
   # Set (or change) 'key' in state to contain 'value'.
   #
-  def sset(key, value, ifnotset: false, default: nil)
-    RCT.sset(key, value, ifnotset: ifnotset, default: default)
+  def sset(key, value)
+    RCT.sset(key, value)
   end
 
 
   #----------------------------------------------------------------------------
   # Set (or change) 'key' in temporary state to contain 'value'.
   #
-  def ssettmp(key, value, ifnotset: false, default: nil)
-    RCT.ssettmp(key, value, ifnotset: ifnotset, default: default)
+  def ssettmp(key, value)
+    RCT.ssettmp(key, value)
   end
 
 
   #----------------------------------------------------------------------------
   # Get the value of 'key' (if available, or returns nil or the default given).
   #
-  def sget(key, default: nil)
-    RCT.sget(key, default: default)
+  def sget(key)
+    RCT.sget(key)
   end
 
 
