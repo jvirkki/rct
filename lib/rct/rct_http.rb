@@ -84,7 +84,7 @@ class RCTHTTP
     ignore_ca = RCT.sget(SSL_IGNORE_CA)
     if (ignore_ca)
       @http_client.ssl_config.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      RCT.log(ERROR, "Insecure SSL mode, ignoring certificate validation!")
+      RCT.log(INFO, "Insecure SSL mode, ignoring certificate validation!")
     end
 
     if (host == nil)

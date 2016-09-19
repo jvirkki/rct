@@ -27,9 +27,18 @@ if [ "$RCT_RUBY" = "" ]; then
     RCT_RUBY=ruby
 fi
 
+UNAME=`uname`
+if [ "$UNAME" = "Darwin" ]; then
+RCTD=`perl -e 'use Cwd "abs_path";print abs_path(shift)' $0`
+BIN=`dirname $RCTD`
+LIB=`perl -e 'use Cwd "abs_path";print abs_path(shift)' $BIN/../lib`
+else
 RCTD=`readlink -f $0`
 BIN=`dirname $RCTD`
 LIB=`readlink -f $BIN/../lib`
+fi
+
+
 RCT=$BIN/rct
 
 echo BIN is $BIN
@@ -39,4 +48,5 @@ echo RCT is $RCT
 
 CMD="$RCT_RUBY -I$LIB -I$LIB/rct -I. $RCT $@"
 echo $CMD
+echo "-----------"
 exec $CMD

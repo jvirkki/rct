@@ -123,30 +123,54 @@ class RCT
 
 
   #---------------------------------------------------------------------------
-  #
+  # TODO
   #
   def self.help
+    puts <<END
 
-    # default is CLI invocation of method name
-    # rct Time.get_time
-    #
-    # provide require file if it is not in CLI list
-    # rct Time.get_time --req time_client
-    # rct --test test-suite
+Global options
+--------------
+  --help : this help
+  -t|--test FILE : run test suite from FILE
+  --req : require (load) a provider implementation
+  -h|--host : server hostname
+  -p|--port : server port
+  --cafile : file containing server certificate(s) to trust
+  --insecure : allow MITM attack on SSL connection (i.e. don't validate CA certificate)
+  -v : increase verbority
 
+CLI mode
+--------
+$ rct [--req impl_class] Class.method [OPTIONS]
+
+OPTIONS can be global (list above) or specific to the method being invoked.
+To see help for a provider Class, run:
+
+$ rct [--req impl_class] Class.HELP
+
+TEST mode
+---------
+not implemented
+
+$ rct [--req impl_class] -t FILE
+
+END
+    exit
   end
 
 
-  # define global options (from parse_global_options) so can do error chacking
+  # define global options (from parse_global_options) so can do error checking
+  # TODO: fix
   $GLOBAL_OPTS = {
     '-t' => 1, '--test' => 1, '--req' => 1, '-h' => 1, '--host' => 1,
-    '-p' => 1, '--port' => 1, '-v' => 1, '--cafile' => 1, '--insecure' => 1
+    '-p' => 1, '--port' => 1, '-v' => 1, '--cafile' => 1, '--insecure' => 1,
+    '--help' => 1
   }
 
   def self.parse_global_options
     pos = 0
 
-    if (ARGV == nil)
+    if (ARGV.length == 0)
       die("No arguments!")
     end
 
@@ -156,6 +180,9 @@ class RCT
       if (arg == '-t' || arg == '--test')
         sset(RCT_MODE, RCT_MODE_TEST)
         sset(TEST_SUITE_FILE, argv_get(pos))
+
+      elsif (arg == '--help')
+        help()
 
       elsif (arg == '--req')
         require argv_get(pos)
@@ -171,6 +198,7 @@ class RCT
 
       elsif (arg == '--insecure')
         sset(SSL_IGNORE_CA, true)
+        ARGV.delete_at(pos)
 
       elsif (arg == '-v')
         increase_log_level()
@@ -216,24 +244,45 @@ class RCT
   #---------------------------------------------------------------------------
   # Set a key,value pair in the global state.
   #
-  def self.sset(key, value, temp=false)
-    $STATE.set(key, value, temp)
+  def self.sset(key, value, ifnotset: false, default: nil, tmp: false)
+
+    msg = "SET"
+    msg = msg + "-TMP" if (tmp)
+    msg = msg + ": #{key} = '#{value}', ifnotset: #{ifnotset}, default: #{default}"
+
+    if (ifnotset)
+      if ($STATE.get(key) != nil)
+        msg = msg + " (SKIP)"
+        log(DEBUG, msg)
+        return
+      end
+    end
+
+    if (value == nil)
+      msg = msg + " (using default)"
+      value = default
+    end
+
+    $STATE.set(key, value, tmp)
+    log(DEBUG, msg)
   end
 
 
   #---------------------------------------------------------------------------
   # Set a temporary key,value pair in the global state.
   #
-  def self.ssettmp(key, value)
-    $STATE.set(key, value, true)
+  def self.ssettmp(key, value, ifnotset: false, default: nil)
+    sset(key, value, ifnotset: ifnotset, default: default, tmp: true)
   end
 
 
   #---------------------------------------------------------------------------
   # Get the value of a key from the global state.
   #
-  def self.sget(key)
-    $STATE.get(key)
+  def self.sget(key, default: nil)
+    val = $STATE.get(key)
+    return val if (val != nil)
+    default
   end
 
 
